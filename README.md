@@ -14,7 +14,7 @@ This project demonstrates dynamic UI rendering, state management, slot booking l
 
 ## 🚀 Live Demo
 
-> (Add your deployed link here after hosting)
+https://hospital-managment-system-front.netlify.app/
 
 ---
 
