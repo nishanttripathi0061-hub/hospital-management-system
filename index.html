@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hospital Management System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <i class="fa-solid fa-hospital"></i> City Hospital
+            </div>
+            <ul class="nav-links">
+                <li>
+                    <a href="#">
+                        <i class="fa-solid fa-house"></i> Home
+                    </a>
+                </li>
+                <li>
+                    <a href="#doctors">
+                        <i class="fa-solid fa-user-doctor"></i> Doctors
+                    </a>
+                </li>
+                <li>
+                    <a href="#appointment">
+                        <i class="fa-solid fa-calendar-check"></i> Appointment
+                    </a>
+                </li>
+                <li>
+                    <a href="#contact">
+                        <i class="fa-solid fa-phone"></i> Contact
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+
+    <!-- ================= HERO SECTION ================= -->
+<section class="hero">
+    <div class="hero-content">
+        
+        <h1>
+            <i class="fa-solid fa-hospital-user"></i>
+            Smart & Easy Hospital Appointments
+        </h1>
+
+        <p>
+            Choose your doctor, check availability, and book your appointment in seconds.
+        </p>
+
+        <div class="hero-buttons">
+            <button id="scrollToDoctors" class="primary-btn">
+                <i class="fa-solid fa-user-doctor"></i>
+                View Doctors
+            </button>
+
+            <button id="scrollToAppointment" class="secondary-btn">
+                <i class="fa-solid fa-calendar-check"></i>
+                Book Appointment
+            </button>
+        </div>
+
+    </div>
+</section>
+
+
+    <!-- ================= DOCTORS SECTION ================= -->
+    <section id="doctors" class="doctors-section">
+        <h2>
+            <i class="fa-solid fa-user-doctor"></i>
+            Our Doctors
+        </h2>
+        <div id="doctor-container">
+            <!-- Doctors will be dynamically inserted here -->
+        </div>
+    </section>
+
+
+    <!-- ================= SLOT SECTION ================= -->
+    <section class="slots-section">
+        <h2>
+            <i class="fa-solid fa-clock"></i>
+            Available Slots
+        </h2>
+         <!-- DATE PICKER -->
+        <div class="date-picker">
+            <label for="appointment-date">
+                <i class="fa-solid fa-calendar-days"></i>
+                Select Date:
+            </label>
+            <input type="date" id="appointment-date">
+        </div>
+
+        <div id="slot-container">
+            <!-- Slots will appear here after selecting doctor -->
+        </div>
+    </section>
+
+
+    <!-- ================= APPOINTMENT FORM ================= -->
+    <section id="appointment" class="appointment-section">
+        <h2>
+            <i class="fa-solid fa-notes-medical"></i>
+            Book Appointment
+        </h2>
+
+        <form id="appointment-form">
+
+            <div class="form-group">
+                <label for="patient-name">
+                    <i class="fa-solid fa-user"></i> Full Name
+                </label>
+                <input type="text" id="patient-name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="patient-age">
+                    <i class="fa-solid fa-cake-candles"></i> Age
+                </label>
+                <input type="number" id="patient-age" required>
+            </div>
+
+            <div class="form-group">
+                <label for="patient-phone">
+                    <i class="fa-solid fa-phone"></i> Phone Number
+                </label>
+                <input type="tel" id="patient-phone" required>
+            </div>
+
+            <!-- Hidden fields -->
+            <input type="hidden" id="selected-doctor">
+            <input type="hidden" id="selected-slot">
+
+            <button type="submit">
+                <i class="fa-solid fa-check"></i> Confirm Booking
+            </button>
+        </form>
+    </section>
+
+
+    <!-- ================= CONFIRMATION SECTION ================= -->
+    <section class="confirmation-section">
+        <div id="confirmation-message"></div>
+    </section>
+
+
+    <!-- ================= FOOTER ================= -->
+    <footer id="contact">
+        <p>
+            <i class="fa-solid fa-truck-medical"></i>
+            Emergency: +91 9876543210
+        </p>
+        <p>© 2026 City Hospital. All Rights Reserved.</p>
+    </footer>
+
+
+    <!-- JS Files -->
+    <script src="js/data.js"></script>
+    <script src="js/main.js"></script>
+    
+
+</body>
+</html>

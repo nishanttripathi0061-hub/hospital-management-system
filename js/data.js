@@ -1,0 +1,122 @@
+const doctors = [
+    {
+        id: 1,
+        name: "Dr. Amit Sharma",
+        specialization: "Cardiologist",
+        experience: "10 Years",
+        qualification: "MBBS, MD (Cardiology)",
+        fee: 800,
+        rating: 4.8,
+        availableDays: ["Mon", "Wed", "Fri"],
+        image: "assets/images/1.jpg",
+        slots: ["9:00 AM", "10:00 AM", "11:00 AM", "4:00 PM"]
+    },
+    {
+        id: 2,
+        name: "Dr. Neha Verma",
+        specialization: "Dermatologist",
+        experience: "8 Years",
+        qualification: "MBBS, MD (Dermatology)",
+        fee: 600,
+        rating: 4.6,
+        availableDays: ["Tue", "Thu", "Sat"],
+        image: "assets/images/2.jpg",
+        slots: ["10:00 AM", "12:00 PM", "3:00 PM", "5:00 PM"]
+    },
+    {
+        id: 3,
+        name: "Dr. Rahul Mehta",
+        specialization: "Orthopedic",
+        experience: "12 Years",
+        qualification: "MBBS, MS (Orthopedics)",
+        fee: 750,
+        rating: 4.7,
+        availableDays: ["Mon", "Thu", "Sat"],
+        image: "assets/images/3.jpg",
+        slots: ["9:30 AM", "11:30 AM", "2:00 PM", "6:00 PM"]
+    },
+    {
+        id: 4,
+        name: "Dr. Priya Singh",
+        specialization: "Pediatrician",
+        experience: "9 Years",
+        qualification: "MBBS, MD (Pediatrics)",
+        fee: 500,
+        rating: 4.5,
+        availableDays: ["Mon", "Wed", "Sat"],
+        image: "assets/images/4.jpg",
+        slots: ["8:30 AM", "10:30 AM", "1:00 PM", "4:30 PM"]
+    },
+    {
+        id: 5,
+        name: "Dr. Arjun Kapoor",
+        specialization: "Neurologist",
+        experience: "15 Years",
+        qualification: "MBBS, DM (Neurology)",
+        fee: 1000,
+        rating: 4.9,
+        availableDays: ["Tue", "Fri"],
+        image: "assets/images/5.jpg",
+        slots: ["9:00 AM", "12:00 PM", "3:30 PM", "6:30 PM"]
+    },
+    {
+        id: 6,
+        name: "Dr. Sneha Joshi",
+        specialization: "Gynecologist",
+        experience: "11 Years",
+        qualification: "MBBS, MS (Gynecology)",
+        fee: 700,
+        rating: 4.6,
+        availableDays: ["Mon", "Wed", "Fri"],
+        image: "assets/images/6.jpg",
+        slots: ["10:00 AM", "1:00 PM", "4:00 PM", "7:00 PM"]
+    },
+    {
+        id: 7,
+        name: "Dr. Vikram Rao",
+        specialization: "ENT Specialist",
+        experience: "7 Years",
+        qualification: "MBBS, MS (ENT)",
+        fee: 550,
+        rating: 4.4,
+        availableDays: ["Tue", "Thu", "Sat"],
+        image: "assets/images/7.jpg",
+        slots: ["9:00 AM", "11:00 AM", "2:00 PM", "5:00 PM"]
+    },
+    {
+        id: 8,
+        name: "Dr. Kavita Iyer",
+        specialization: "Psychiatrist",
+        experience: "13 Years",
+        qualification: "MBBS, MD (Psychiatry)",
+        fee: 900,
+        rating: 4.7,
+        availableDays: ["Mon", "Thu"],
+        image: "assets/images/8.jpg",
+        slots: ["10:00 AM", "12:30 PM", "3:00 PM", "6:00 PM"]
+    },
+    {
+        id: 9,
+        name: "Dr. Rohan Malhotra",
+        specialization: "General Physician",
+        experience: "6 Years",
+        qualification: "MBBS",
+        fee: 400,
+        rating: 4.3,
+        availableDays: ["Mon", "Tue", "Wed", "Thu", "Fri"],
+        image: "assets/images/9.jpg",
+        slots: ["8:00 AM", "10:00 AM", "1:00 PM", "4:00 PM"]
+    },
+    {
+        id: 10,
+        name: "Dr. Anjali Deshmukh",
+        specialization: "Oncologist",
+        experience: "14 Years",
+        qualification: "MBBS, MD (Oncology)",
+        fee: 1100,
+        rating: 4.9,
+        availableDays: ["Wed", "Fri"],
+        image: "assets/images/10.jpg",
+        slots: ["9:30 AM", "12:00 PM", "3:00 PM", "5:30 PM"]
+    }
+];
