@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+<div class="dashboard">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <h2 class="logo">Admin</h2>
+        <ul class="menu">
+            <li><a href="admin-dashboard.html">Dashboard</a></li>
+            <li><a href="admin-doctors.html">Doctors</a></li>
+            <li><a href="admin-add-doctor.html">Add Doctor</a></li>
+            <li><a href="admin-bookings.html">Bookings</a></li>
+            <li><a href="index.html">Back to Website</a></li>
+        </ul>
+    </aside>
+
+    <!-- OVERLAY -->
+    <div id="overlay" class="overlay"></div>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <header class="top-bar">
+            <div class="top-left">
+                <button id="menu-toggle" class="menu-btn">☰</button>
+                <h1>Dashboard Overview</h1>
+            </div>
+            <button id="logout-btn">Logout</button>
+        </header>
+
+        <div class="dashboard-overview">
+            <section class="card stats-card">
+                <h2>Total Doctors</h2>
+                <p id="total-doctors">0</p>
+            </section>
+
+            <section class="card stats-card">
+                <h2>Total Bookings</h2>
+                <p id="total-bookings">0</p>
+            </section>
+
+            <section class="card stats-card">
+                <h2>Today's Bookings</h2>
+                <p id="today-bookings">0</p>
+            </section>
+        </div>
+
+    </main>
+
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

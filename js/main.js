@@ -1,11 +1,21 @@
 class HospitalApp {
 
-    constructor(doctorsData) {
+    constructor() {
 
-        // Data
-        this.doctors = doctorsData;
+        // ================= LOAD DOCTORS =================
 
-        // DOM Elements
+        let storedDoctors = JSON.parse(localStorage.getItem("doctors"));
+
+        if (!storedDoctors) {
+            // First time load → seed from defaultDoctors
+            localStorage.setItem("doctors", JSON.stringify(defaultDoctors));
+            this.doctors = defaultDoctors;
+        } else {
+            this.doctors = storedDoctors;
+        }
+
+        // ================= DOM ELEMENTS =================
+
         this.doctorContainer = document.getElementById("doctor-container");
         this.slotContainer = document.getElementById("slot-container");
         this.form = document.getElementById("appointment-form");
@@ -13,12 +23,12 @@ class HospitalApp {
         this.dateInput = document.getElementById("appointment-date");
         this.slotsSection = document.querySelector(".slots-section");
 
-        // State
+        // ================= STATE =================
+
         this.selectedDoctor = null;
         this.selectedSlot = null;
         this.selectedDate = null;
 
-        // Initialize
         this.init();
     }
 
@@ -28,39 +38,49 @@ class HospitalApp {
         this.handleHeroScroll();
         this.scrollAppointment();
         this.handleDateChange();
-        this.setMinDate(); // 🔥 Disable past dates
+        this.setMinDate();
     }
 
     // ================= DISABLE PAST DATES =================
+
     setMinDate() {
         const today = new Date().toISOString().split("T")[0];
-        this.dateInput.min = today;
+        if (this.dateInput) {
+            this.dateInput.min = today;
+        }
     }
 
     // ================= HERO SCROLL =================
+
     handleHeroScroll() {
-        document.getElementById("scrollToDoctors")
-            .addEventListener("click", () => {
+        const btn = document.getElementById("scrollToDoctors");
+        if (btn) {
+            btn.addEventListener("click", () => {
                 document.getElementById("doctors")
                     .scrollIntoView({ behavior: "smooth" });
             });
+        }
     }
 
     scrollAppointment() {
-        document.getElementById("scrollToAppointment")
-            .addEventListener("click", () => {
+        const btn = document.getElementById("scrollToAppointment");
+        if (btn) {
+            btn.addEventListener("click", () => {
                 document.getElementById("appointment")
                     .scrollIntoView({ behavior: "smooth" });
             });
+        }
     }
 
     // ================= DATE CHANGE =================
+
     handleDateChange() {
+
+        if (!this.dateInput) return;
+
         this.dateInput.addEventListener("change", (e) => {
 
             this.selectedDate = e.target.value;
-
-            // 🔥 Reset previous slot
             this.selectedSlot = null;
 
             if (this.selectedDoctor) {
@@ -71,7 +91,10 @@ class HospitalApp {
     }
 
     // ================= RENDER DOCTORS =================
+
     renderDoctors() {
+
+        if (!this.doctorContainer) return;
 
         this.doctorContainer.innerHTML = "";
 
@@ -86,7 +109,7 @@ class HospitalApp {
                 </div>
                 <h3>${doctor.name}</h3>
                 <p>${doctor.specialization}</p>
-                <p>Experience: ${doctor.experience}</p>
+                <p>Experience: ${doctor.experience} years</p>
                 <p>Fee: ₹${doctor.fee}</p>
                 <p>⭐ ${doctor.rating}</p>
             `;
@@ -119,7 +142,10 @@ class HospitalApp {
     }
 
     // ================= RENDER SLOTS =================
+
     renderSlots(doctor) {
+
+        if (!this.slotContainer) return;
 
         this.slotContainer.innerHTML = "";
 
@@ -132,16 +158,21 @@ class HospitalApp {
             return;
         }
 
+        let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+
         doctor.slots.forEach((slotTime) => {
 
             const slot = document.createElement("div");
             slot.classList.add("slot");
             slot.innerText = slotTime;
 
-            const slotKey = `${doctor.id}-${this.selectedDate}-${slotTime}`;
+            const isBooked = bookings.some(booking =>
+                booking.doctorId === doctor.id &&
+                booking.date === this.selectedDate &&
+                booking.time === slotTime
+            );
 
-            // Check if already booked
-            if (localStorage.getItem(slotKey)) {
+            if (isBooked) {
                 slot.classList.add("booked");
             }
 
@@ -161,7 +192,10 @@ class HospitalApp {
     }
 
     // ================= HANDLE BOOKING =================
+
     handleFormSubmit() {
+
+        if (!this.form) return;
 
         this.form.addEventListener("submit", (e) => {
 
@@ -176,10 +210,22 @@ class HospitalApp {
                 return;
             }
 
-            const slotKey = `${this.selectedDoctor.id}-${this.selectedDate}-${this.selectedSlot}`;
+            let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
 
-            // Save booking permanently
-            localStorage.setItem(slotKey, "booked");
+            const newBooking = {
+                id: Date.now(),
+                doctorId: this.selectedDoctor.id,
+                doctorName: this.selectedDoctor.name,
+                patientName: name,
+                age: age,
+                phone: phone,
+                date: this.selectedDate,
+                time: this.selectedSlot
+            };
+
+            bookings.push(newBooking);
+
+            localStorage.setItem("bookings", JSON.stringify(bookings));
 
             this.confirmationMessage.innerHTML = `
                 <i class="fa-solid fa-circle-check"></i>
@@ -190,18 +236,16 @@ class HospitalApp {
                 Patient: ${name}
             `;
 
-            // Reset form and state
             this.form.reset();
             this.selectedSlot = null;
 
-            // Re-render slots to update red state
             this.renderSlots(this.selectedDoctor);
         });
     }
 }
 
-
 // ================= START APP =================
+
 document.addEventListener("DOMContentLoaded", () => {
-    new HospitalApp(doctors);
+    new HospitalApp();
 });

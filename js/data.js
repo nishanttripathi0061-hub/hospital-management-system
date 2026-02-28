@@ -1,4 +1,4 @@
-const doctors = [
+const defaultDoctors = [
     {
         id: 1,
         name: "Dr. Amit Sharma",
@@ -119,4 +119,5 @@ const doctors = [
         image: "assets/images/10.jpg",
         slots: ["9:30 AM", "12:00 PM", "3:00 PM", "5:30 PM"]
     }
+
 ];

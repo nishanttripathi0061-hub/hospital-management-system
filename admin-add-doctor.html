@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Doctor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+<div class="dashboard">
+
+    <aside class="sidebar">
+        <h2 class="logo">Admin</h2>
+        <ul class="menu">
+            <li><a href="admin-dashboard.html">Dashboard</a></li>
+            <li><a href="admin-doctors.html">Doctors</a></li>
+            <li><a href="admin-add-doctor.html">Add Doctor</a></li>
+            <li><a href="admin-bookings.html">Bookings</a></li>
+            <li><a href="index.html">Back to Website</a></li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="top-bar">
+            <h1>Add New Doctor</h1>
+            <button id="logout-btn">Logout</button>
+        </header>
+
+        <section class="card">
+            <form id="add-doctor-form">
+
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" id="doc-name" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Specialization</label>
+                    <input type="text" id="doc-specialization" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Experience</label>
+                    <input type="number" id="doc-experience" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Fee</label>
+                    <input type="number" id="doc-fee" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Rating</label>
+                    <input type="number" step="0.1" min="1" max="5" id="doc-rating" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Image URL</label>
+                    <input type="text" id="doc-image" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Slots (comma separated)</label>
+                    <input type="text" id="doc-slots">
+                </div>
+
+                <button type="submit" class="primary-btn">
+                    Add Doctor
+                </button>
+
+            </form>
+        </section>
+
+    </main>
+
+</div>
+<script src="js/data.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
