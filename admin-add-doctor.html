@@ -6,30 +6,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/admin.css">
 </head>
-<body>
+<body data-page="add-doctor">
 
 <div class="dashboard">
 
     <aside class="sidebar">
-        <h2 class="logo">Admin</h2>
+        <h2 class="logo">Admin Panel</h2>
         <ul class="menu">
-            <li><a href="admin-dashboard.html">Dashboard</a></li>
-            <li><a href="admin-doctors.html">Doctors</a></li>
-            <li><a href="admin-add-doctor.html">Add Doctor</a></li>
-            <li><a href="admin-bookings.html">Bookings</a></li>
+            <li><a href="admin-dashboard.html" data-nav="dashboard">Dashboard</a></li>
+            <li><a href="admin-doctors.html" data-nav="doctors">Doctors</a></li>
+            <li><a href="admin-add-doctor.html" data-nav="add-doctor">Add Doctor</a></li>
+            <li><a href="admin-bookings.html" data-nav="bookings">Bookings</a></li>
             <li><a href="index.html">Back to Website</a></li>
         </ul>
     </aside>
 
+    <div id="overlay" class="overlay"></div>
+
     <main class="main-content">
 
         <header class="top-bar">
-            <h1>Add New Doctor</h1>
+            <div class="top-left">
+                <button id="menu-toggle" class="menu-btn" type="button" aria-label="Open menu">&#9776;</button>
+                <h1>Add New Doctor</h1>
+            </div>
             <button id="logout-btn">Logout</button>
         </header>
 
+        <p class="page-subtitle">Create complete doctor profiles with slots and availability.</p>
+
         <section class="card">
-            <form id="add-doctor-form">
+            <div class="card-head">
+                <h2>Doctor Details</h2>
+            </div>
+            <form id="add-doctor-form" class="doctor-form-grid">
 
                 <div class="form-group">
                     <label>Name</label>
@@ -42,12 +52,12 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Experience</label>
+                    <label>Experience (Years)</label>
                     <input type="number" id="doc-experience" required>
                 </div>
 
                 <div class="form-group">
-                    <label>Fee</label>
+                    <label>Fee (INR)</label>
                     <input type="number" id="doc-fee" required>
                 </div>
 
@@ -61,12 +71,12 @@
                     <input type="text" id="doc-image" required>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group form-span-full">
                     <label>Slots (comma separated)</label>
-                    <input type="text" id="doc-slots">
+                    <input type="text" id="doc-slots" placeholder="10:00 AM, 11:00 AM, 12:00 PM">
                 </div>
 
-                <button type="submit" class="primary-btn">
+                <button type="submit" class="primary-btn form-span-full">
                     Add Doctor
                 </button>
 

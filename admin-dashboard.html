@@ -6,35 +6,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/admin.css">
 </head>
-<body>
+<body data-page="dashboard">
 
 <div class="dashboard">
 
-    <!-- SIDEBAR -->
     <aside class="sidebar">
-        <h2 class="logo">Admin</h2>
+        <h2 class="logo">Admin Panel</h2>
         <ul class="menu">
-            <li><a href="admin-dashboard.html">Dashboard</a></li>
-            <li><a href="admin-doctors.html">Doctors</a></li>
-            <li><a href="admin-add-doctor.html">Add Doctor</a></li>
-            <li><a href="admin-bookings.html">Bookings</a></li>
+            <li><a href="admin-dashboard.html" data-nav="dashboard">Dashboard</a></li>
+            <li><a href="admin-doctors.html" data-nav="doctors">Doctors</a></li>
+            <li><a href="admin-add-doctor.html" data-nav="add-doctor">Add Doctor</a></li>
+            <li><a href="admin-bookings.html" data-nav="bookings">Bookings</a></li>
             <li><a href="index.html">Back to Website</a></li>
         </ul>
     </aside>
 
-    <!-- OVERLAY -->
     <div id="overlay" class="overlay"></div>
 
-    <!-- MAIN CONTENT -->
     <main class="main-content">
 
         <header class="top-bar">
             <div class="top-left">
-                <button id="menu-toggle" class="menu-btn">☰</button>
+                <button id="menu-toggle" class="menu-btn" type="button" aria-label="Open menu">&#9776;</button>
                 <h1>Dashboard Overview</h1>
             </div>
             <button id="logout-btn">Logout</button>
         </header>
+
+        <p class="page-subtitle">
+            Monitor doctors and bookings from one place.
+            <span id="dashboard-date"></span>
+        </p>
 
         <div class="dashboard-overview">
             <section class="card stats-card">
@@ -52,6 +54,15 @@
                 <p id="today-bookings">0</p>
             </section>
         </div>
+
+        <section class="card quick-actions">
+            <h2>Quick Actions</h2>
+            <div class="quick-grid">
+                <a class="quick-link" href="admin-add-doctor.html">Add New Doctor</a>
+                <a class="quick-link" href="admin-doctors.html">Manage Doctors</a>
+                <a class="quick-link" href="admin-bookings.html">Review Bookings</a>
+            </div>
+        </section>
 
     </main>
 

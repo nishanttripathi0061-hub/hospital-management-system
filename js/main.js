@@ -32,6 +32,13 @@ class HospitalApp {
 
         this.stepperItems = Array.from(document.querySelectorAll(".step-item"));
         this.toastContainer = document.getElementById("toast-container");
+        this.summaryStatus = document.getElementById("summary-status");
+        this.summaryDoctor = document.getElementById("summary-doctor");
+        this.summarySpecialization = document.getElementById("summary-specialization");
+        this.summaryDate = document.getElementById("summary-date");
+        this.summarySlot = document.getElementById("summary-slot");
+        this.summaryPatient = document.getElementById("summary-patient");
+        this.summaryPhone = document.getElementById("summary-phone");
 
         this.selectedDoctor = null;
         this.selectedSlot = null;
@@ -39,6 +46,7 @@ class HospitalApp {
 
         this.selectedSpecialization = "All";
         this.searchTerm = "";
+        this.scrollObserver = null;
 
         this.init();
     }
@@ -57,6 +65,33 @@ class HospitalApp {
         this.initDoctorFilters();
         this.initStepper();
         this.bindPatientInputProgress();
+        this.initScrollAnimations();
+        this.updateBookingSummary();
+    }
+
+    initScrollAnimations() {
+        if (!("IntersectionObserver" in window)) return;
+
+        const revealItems = document.querySelectorAll("section, footer");
+        if (revealItems.length === 0) return;
+
+        revealItems.forEach((item) => item.classList.add("reveal"));
+
+        this.scrollObserver = new IntersectionObserver(
+            (entries, observer) => {
+                entries.forEach((entry) => {
+                    if (!entry.isIntersecting) return;
+                    entry.target.classList.add("in-view");
+                    observer.unobserve(entry.target);
+                });
+            },
+            {
+                threshold: 0.14,
+                rootMargin: "0px 0px -40px 0px"
+            }
+        );
+
+        revealItems.forEach((item) => this.scrollObserver.observe(item));
     }
 
     setMinDate() {
@@ -175,6 +210,7 @@ class HospitalApp {
             }
 
             this.updateStepper();
+            this.updateBookingSummary();
         });
     }
 
@@ -223,6 +259,7 @@ class HospitalApp {
                 }
 
                 this.updateStepper();
+                this.updateBookingSummary();
                 this.slotsSection.scrollIntoView({ behavior: "smooth" });
             });
 
@@ -265,6 +302,7 @@ class HospitalApp {
                 slot.classList.add("active");
                 this.selectedSlot = slotTime;
                 this.updateStepper();
+                this.updateBookingSummary();
             });
 
             this.slotContainer.appendChild(slot);
@@ -278,8 +316,61 @@ class HospitalApp {
     bindPatientInputProgress() {
         [this.nameInput, this.ageInput, this.phoneInput].forEach((input) => {
             if (!input) return;
-            input.addEventListener("input", () => this.updateStepper());
+            input.addEventListener("input", () => {
+                this.updateStepper();
+                this.updateBookingSummary();
+            });
         });
+    }
+
+    formatReadableDate(dateString) {
+        if (!dateString) return "Not selected";
+
+        const date = new Date(`${dateString}T00:00:00`);
+        if (Number.isNaN(date.getTime())) return dateString;
+
+        return date.toLocaleDateString("en-IN", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        });
+    }
+
+    updateBookingSummary() {
+        if (!this.summaryStatus) return;
+
+        const doctorName = this.selectedDoctor ? this.selectedDoctor.name : "Not selected";
+        const specialization = this.selectedDoctor ? this.selectedDoctor.specialization : "-";
+        const dateLabel = this.formatReadableDate(this.selectedDate);
+        const slotLabel = this.selectedSlot || "Not selected";
+
+        const patientName = this.nameInput && this.nameInput.value.trim()
+            ? this.nameInput.value.trim()
+            : "Not entered";
+
+        const normalizedPhone = this.phoneInput
+            ? this.normalizePhone(this.phoneInput.value.trim())
+            : { valid: false, value: "" };
+
+        const phoneLabel = normalizedPhone.valid
+            ? normalizedPhone.value
+            : (this.phoneInput && this.phoneInput.value.trim() ? this.phoneInput.value.trim() : "Not entered");
+
+        if (this.summaryDoctor) this.summaryDoctor.textContent = doctorName;
+        if (this.summarySpecialization) this.summarySpecialization.textContent = specialization;
+        if (this.summaryDate) this.summaryDate.textContent = dateLabel;
+        if (this.summarySlot) this.summarySlot.textContent = slotLabel;
+        if (this.summaryPatient) this.summaryPatient.textContent = patientName;
+        if (this.summaryPhone) this.summaryPhone.textContent = phoneLabel;
+
+        const isReadyToConfirm =
+            Boolean(this.selectedDoctor) &&
+            Boolean(this.selectedDate) &&
+            Boolean(this.selectedSlot) &&
+            this.hasBasicPatientDetails();
+
+        this.summaryStatus.textContent = isReadyToConfirm ? "Ready to Confirm" : "In Progress";
+        this.summaryStatus.classList.toggle("ready", isReadyToConfirm);
     }
 
     hasBasicPatientDetails() {
@@ -451,6 +542,7 @@ class HospitalApp {
             this.selectedSlot = null;
             this.renderSlots(this.selectedDoctor);
             this.updateStepper();
+            this.updateBookingSummary();
         });
     }
 

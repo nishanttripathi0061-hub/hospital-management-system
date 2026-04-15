@@ -1,5 +1,5 @@
 /* ================= FONTS ================= */
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Manrope:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap');
 
 /* ================= THEME ================= */
 :root {
@@ -27,7 +27,7 @@ html {
 }
 
 body {
-    font-family: 'Manrope', sans-serif;
+    font-family: 'Nunito', sans-serif;
     color: var(--text-main);
     min-height: 100vh;
     background:
@@ -65,7 +65,7 @@ header {
 }
 
 .logo {
-    font-family: 'Cinzel', serif;
+    font-family: 'Quicksand', sans-serif;
     font-size: 1.45rem;
     letter-spacing: 0.4px;
 }
@@ -130,7 +130,7 @@ header {
 }
 
 .hero h1 {
-    font-family: 'Cinzel', serif;
+    font-family: 'Quicksand', sans-serif;
     font-size: clamp(2rem, 2.8vw, 3rem);
     margin-bottom: 14px;
     letter-spacing: 0.4px;
@@ -193,7 +193,7 @@ section {
 
 section h2 {
     margin-bottom: 24px;
-    font-family: 'Cinzel', serif;
+    font-family: 'Quicksand', sans-serif;
     font-size: clamp(1.5rem, 2vw, 2rem);
     color: #f0f7ff;
     letter-spacing: 0.35px;
@@ -386,6 +386,27 @@ footer {
     text-align: center;
 }
 
+/* ================= SCROLL REVEAL ================= */
+.reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    will-change: opacity, transform;
+}
+
+.reveal.in-view {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+}
+
 /* ================= ANIMATIONS ================= */
 @keyframes fadeIn {
     from {
@@ -464,7 +485,7 @@ footer {
     border: 1px solid #c6d4e1;
     border-radius: 10px;
     padding: 12px;
-    font-family: 'Manrope', sans-serif;
+    font-family: 'Nunito', sans-serif;
     resize: vertical;
     min-height: 100px;
 }
@@ -604,7 +625,7 @@ body.theme-light .error-message {
     color: #17314f;
     border-radius: 10px;
     padding: 10px 12px;
-    font-family: 'Manrope', sans-serif;
+    font-family: 'Nunito', sans-serif;
     margin-bottom: 10px;
 }
 

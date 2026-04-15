@@ -1,11 +1,27 @@
 /* ================= TABLET ================= */
 @media (max-width: 992px) {
+    .hero-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-content {
+        max-width: 100%;
+    }
+
+    .hero-panel {
+        max-width: 640px;
+    }
+
     .hero h1 {
         font-size: 2.1rem;
     }
 
-    .doctor-card {
-        width: 230px;
+    .appointment-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .booking-summary {
+        order: -1;
     }
 }
 
@@ -23,6 +39,10 @@
         gap: 10px;
     }
 
+    .section-shell {
+        width: 100%;
+    }
+
     .hero {
         padding: 70px 14px 78px;
     }
@@ -35,9 +55,13 @@
         padding: 44px 5%;
     }
 
-    .doctor-card {
-        width: 100%;
-        max-width: 330px;
+    .hero-metrics {
+        grid-template-columns: 1fr;
+    }
+
+    .doctor-tools,
+    .booking-stepper {
+        position: static;
     }
 
     form {
@@ -63,6 +87,7 @@
 
     .hero-buttons {
         width: 100%;
+        flex-direction: column;
     }
 
     .hero button {

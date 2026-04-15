@@ -60,146 +60,196 @@
         </nav>
     </header>
 
-    <section class="hero">
-        <div class="hero-content">
-            <h1>
-                <i class="fa-solid fa-hospital-user"></i>
-                Smart & Easy Hospital Appointments
-            </h1>
+    <main class="site-main">
+        <section class="hero">
+            <div class="section-shell hero-grid">
+                <div class="hero-content">
+                    <h1>
+                        <i class="fa-solid fa-hospital-user"></i>
+                        Smart & Easy Hospital Appointments
+                    </h1>
 
-            <p>
-                Choose your doctor, check availability, and book your appointment in seconds.
-            </p>
+                    <p>
+                        Choose your doctor, check availability, and book your appointment in seconds.
+                    </p>
 
-            <div class="hero-buttons">
-                <button id="scrollToDoctors" class="primary-btn">
+                    <div class="hero-buttons">
+                        <button id="scrollToDoctors" class="primary-btn">
+                            <i class="fa-solid fa-user-doctor"></i>
+                            View Doctors
+                        </button>
+
+                        <button id="scrollToAppointment" class="secondary-btn">
+                            <i class="fa-solid fa-calendar-check"></i>
+                            Book Appointment
+                        </button>
+                    </div>
+                </div>
+
+                <aside class="hero-panel" aria-label="Hospital highlights">
+                    <h3>Trusted Care Experience</h3>
+                    <div class="hero-metrics">
+                        <div class="metric-item">
+                            <span class="metric-value">24x7</span>
+                            <span class="metric-label">Support Desk</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-value">30+</span>
+                            <span class="metric-label">Specialists</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-value">5 min</span>
+                            <span class="metric-label">Avg Booking Time</span>
+                        </div>
+                    </div>
+                    <p class="hero-note">
+                        Secure appointment management with clear doctor availability and faster patient onboarding.
+                    </p>
+                </aside>
+            </div>
+        </section>
+
+        <section id="doctors" class="doctors-section">
+            <div class="section-shell">
+                <h2>
                     <i class="fa-solid fa-user-doctor"></i>
-                    View Doctors
-                </button>
+                    Our Doctors
+                </h2>
 
-                <button id="scrollToAppointment" class="secondary-btn">
-                    <i class="fa-solid fa-calendar-check"></i>
+                <div class="doctor-tools">
+                    <input id="doctor-search" class="doctor-search" type="text" placeholder="Search doctor by name or specialization">
+                    <div id="specialization-chips" class="chip-group"></div>
+                    <button id="clear-doctor-filters" class="filter-reset" type="button">Clear Filters</button>
+                </div>
+
+                <div id="doctor-container"></div>
+            </div>
+        </section>
+
+        <section class="slots-section">
+            <div class="section-shell">
+                <h2>
+                    <i class="fa-solid fa-clock"></i>
+                    Available Slots
+                </h2>
+
+                <div class="date-picker">
+                    <label for="appointment-date">
+                        <i class="fa-solid fa-calendar-days"></i>
+                        Select Date:
+                    </label>
+                    <input type="date" id="appointment-date">
+                </div>
+
+                <div id="slot-container"></div>
+            </div>
+        </section>
+
+        <section id="consultant" class="consultant-section">
+            <div class="section-shell">
+                <h2>
+                    <i class="fa-solid fa-comments"></i>
+                    Chat With Consultant
+                </h2>
+
+                <div class="consultant-card">
+                    <p class="consultant-subtext">Tell your symptoms and get doctor suggestions instantly.</p>
+
+                    <textarea
+                        id="consultant-input"
+                        placeholder="Example: chest pain, breathing issue, high BP"
+                        rows="4"
+                    ></textarea>
+
+                    <button id="consultant-send" type="button" class="primary-btn consultant-btn">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        Get Suggestion
+                    </button>
+
+                    <div id="consultant-response" class="consultant-response"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="appointment" class="appointment-section">
+            <div class="section-shell">
+                <h2>
+                    <i class="fa-solid fa-notes-medical"></i>
                     Book Appointment
-                </button>
+                </h2>
+
+                <div id="booking-stepper" class="booking-stepper">
+                    <div class="step-item" data-step="1">
+                        <span class="step-dot">1</span>
+                        <span class="step-label">Choose Doctor</span>
+                    </div>
+                    <div class="step-item" data-step="2">
+                        <span class="step-dot">2</span>
+                        <span class="step-label">Pick Date</span>
+                    </div>
+                    <div class="step-item" data-step="3">
+                        <span class="step-dot">3</span>
+                        <span class="step-label">Select Slot</span>
+                    </div>
+                    <div class="step-item" data-step="4">
+                        <span class="step-dot">4</span>
+                        <span class="step-label">Patient Details</span>
+                    </div>
+                </div>
+
+                <div class="appointment-layout">
+                    <form id="appointment-form">
+                        <div class="form-group">
+                            <label for="patient-name">
+                                <i class="fa-solid fa-user"></i> Full Name
+                            </label>
+                            <input type="text" id="patient-name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="patient-age">
+                                <i class="fa-solid fa-cake-candles"></i> Age
+                            </label>
+                            <input type="number" id="patient-age" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="patient-phone">
+                                <i class="fa-solid fa-phone"></i> Phone Number
+                            </label>
+                            <input type="tel" id="patient-phone" required>
+                        </div>
+
+                        <input type="hidden" id="selected-doctor">
+                        <input type="hidden" id="selected-slot">
+
+                        <button type="submit">
+                            <i class="fa-solid fa-check"></i> Confirm Booking
+                        </button>
+                    </form>
+
+                    <aside class="booking-summary">
+                        <h3>Booking Checklist</h3>
+                        <div class="summary-status" id="summary-status">In Progress</div>
+                        <div class="summary-grid">
+                            <p><strong>Doctor:</strong> <span id="summary-doctor">Not selected</span></p>
+                            <p><strong>Specialization:</strong> <span id="summary-specialization">-</span></p>
+                            <p><strong>Date:</strong> <span id="summary-date">Not selected</span></p>
+                            <p><strong>Slot:</strong> <span id="summary-slot">Not selected</span></p>
+                            <p><strong>Patient:</strong> <span id="summary-patient">Not entered</span></p>
+                            <p><strong>Phone:</strong> <span id="summary-phone">Not entered</span></p>
+                        </div>
+                    </aside>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section id="doctors" class="doctors-section">
-        <h2>
-            <i class="fa-solid fa-user-doctor"></i>
-            Our Doctors
-        </h2>
-
-        <div class="doctor-tools">
-            <input id="doctor-search" class="doctor-search" type="text" placeholder="Search doctor by name or specialization">
-            <div id="specialization-chips" class="chip-group"></div>
-            <button id="clear-doctor-filters" class="filter-reset" type="button">Clear Filters</button>
-        </div>
-
-        <div id="doctor-container"></div>
-    </section>
-
-    <section class="slots-section">
-        <h2>
-            <i class="fa-solid fa-clock"></i>
-            Available Slots
-        </h2>
-
-        <div class="date-picker">
-            <label for="appointment-date">
-                <i class="fa-solid fa-calendar-days"></i>
-                Select Date:
-            </label>
-            <input type="date" id="appointment-date">
-        </div>
-
-        <div id="slot-container"></div>
-    </section>
-
-    <section id="consultant" class="consultant-section">
-        <h2>
-            <i class="fa-solid fa-comments"></i>
-            Chat With Consultant
-        </h2>
-
-        <div class="consultant-card">
-            <p class="consultant-subtext">Tell your symptoms and get doctor suggestions instantly.</p>
-
-            <textarea
-                id="consultant-input"
-                placeholder="Example: chest pain, breathing issue, high BP"
-                rows="4"
-            ></textarea>
-
-            <button id="consultant-send" type="button" class="primary-btn consultant-btn">
-                <i class="fa-solid fa-paper-plane"></i>
-                Get Suggestion
-            </button>
-
-            <div id="consultant-response" class="consultant-response"></div>
-        </div>
-    </section>
-
-    <section id="appointment" class="appointment-section">
-        <h2>
-            <i class="fa-solid fa-notes-medical"></i>
-            Book Appointment
-        </h2>
-
-        <div id="booking-stepper" class="booking-stepper">
-            <div class="step-item" data-step="1">
-                <span class="step-dot">1</span>
-                <span class="step-label">Choose Doctor</span>
+        <section class="confirmation-section">
+            <div class="section-shell">
+                <div id="confirmation-message"></div>
             </div>
-            <div class="step-item" data-step="2">
-                <span class="step-dot">2</span>
-                <span class="step-label">Pick Date</span>
-            </div>
-            <div class="step-item" data-step="3">
-                <span class="step-dot">3</span>
-                <span class="step-label">Select Slot</span>
-            </div>
-            <div class="step-item" data-step="4">
-                <span class="step-dot">4</span>
-                <span class="step-label">Patient Details</span>
-            </div>
-        </div>
-
-        <form id="appointment-form">
-            <div class="form-group">
-                <label for="patient-name">
-                    <i class="fa-solid fa-user"></i> Full Name
-                </label>
-                <input type="text" id="patient-name" required>
-            </div>
-
-            <div class="form-group">
-                <label for="patient-age">
-                    <i class="fa-solid fa-cake-candles"></i> Age
-                </label>
-                <input type="number" id="patient-age" required>
-            </div>
-
-            <div class="form-group">
-                <label for="patient-phone">
-                    <i class="fa-solid fa-phone"></i> Phone Number
-                </label>
-                <input type="tel" id="patient-phone" required>
-            </div>
-
-            <input type="hidden" id="selected-doctor">
-            <input type="hidden" id="selected-slot">
-
-            <button type="submit">
-                <i class="fa-solid fa-check"></i> Confirm Booking
-            </button>
-        </form>
-    </section>
-
-    <section class="confirmation-section">
-        <div id="confirmation-message"></div>
-    </section>
+        </section>
+    </main>
 
     <footer id="contact">
         <p>

@@ -6,29 +6,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/admin.css">
 </head>
-<body>
+<body data-page="doctors">
 
 <div class="dashboard">
 
     <aside class="sidebar">
-        <h2 class="logo">Admin</h2>
+        <h2 class="logo">Admin Panel</h2>
         <ul class="menu">
-            <li><a href="admin-dashboard.html">Dashboard</a></li>
-            <li><a href="admin-doctors.html">Doctors</a></li>
-            <li><a href="admin-add-doctor.html">Add Doctor</a></li>
-            <li><a href="admin-bookings.html">Bookings</a></li>
+            <li><a href="admin-dashboard.html" data-nav="dashboard">Dashboard</a></li>
+            <li><a href="admin-doctors.html" data-nav="doctors">Doctors</a></li>
+            <li><a href="admin-add-doctor.html" data-nav="add-doctor">Add Doctor</a></li>
+            <li><a href="admin-bookings.html" data-nav="bookings">Bookings</a></li>
             <li><a href="index.html">Back to Website</a></li>
         </ul>
     </aside>
 
+    <div id="overlay" class="overlay"></div>
+
     <main class="main-content">
 
         <header class="top-bar">
-            <h1>Doctors List</h1>
+            <div class="top-left">
+                <button id="menu-toggle" class="menu-btn" type="button" aria-label="Open menu">&#9776;</button>
+                <h1>Doctors List</h1>
+            </div>
             <button id="logout-btn">Logout</button>
         </header>
 
+        <p class="page-subtitle">Manage all listed doctors and keep specialties updated.</p>
+
         <section class="card">
+            <div class="card-head">
+                <h2>Active Doctors</h2>
+                <span class="pill-count" id="doctor-count">0</span>
+            </div>
             <div id="doctor-list"></div>
         </section>
 
