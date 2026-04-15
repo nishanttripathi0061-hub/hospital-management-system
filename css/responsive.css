@@ -1,21 +1,20 @@
 /* ================= TABLET ================= */
 @media (max-width: 992px) {
-
     .hero h1 {
-        font-size: 30px;
+        font-size: 2.1rem;
     }
 
     .doctor-card {
-        width: 220px;
+        width: 230px;
     }
 }
 
 /* ================= MOBILE ================= */
 @media (max-width: 768px) {
-
     .navbar {
         flex-direction: column;
         gap: 10px;
+        padding-inline: 5%;
     }
 
     .nav-links {
@@ -24,32 +23,107 @@
         gap: 10px;
     }
 
+    .hero {
+        padding: 70px 14px 78px;
+    }
+
+    .hero::before {
+        inset: 12px 4%;
+    }
+
     section {
-        padding: 40px 5%;
+        padding: 44px 5%;
     }
 
     .doctor-card {
         width: 100%;
-        max-width: 300px;
+        max-width: 330px;
     }
 
     form {
         width: 100%;
+        padding: 22px;
+    }
+
+    footer {
+        flex-direction: column;
+        gap: 6px;
     }
 }
 
 /* ================= SMALL MOBILE ================= */
 @media (max-width: 480px) {
-
     .hero h1 {
-        font-size: 24px;
+        font-size: 1.65rem;
     }
 
     .hero p {
-        font-size: 14px;
+        font-size: 0.92rem;
+    }
+
+    .hero-buttons {
+        width: 100%;
     }
 
     .hero button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .theme-toggle {
+        order: 3;
+    }
+
+    .consultant-card {
+        padding: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .theme-toggle {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .consultant-btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 900px) {
+    .booking-stepper {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .doctor-tools {
+        padding: 12px;
+    }
+
+    .filter-chip {
+        font-size: 0.8rem;
+    }
+
+    .toast-container {
+        left: 12px;
+        right: 12px;
+        top: 78px;
+        max-width: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .booking-stepper {
+        grid-template-columns: 1fr;
+    }
+
+    .step-item {
+        justify-content: flex-start;
+    }
+
+    .filter-reset {
         width: 100%;
     }
 }

@@ -1,20 +1,14 @@
 class HospitalApp {
 
     constructor() {
-
-        // ================= LOAD DOCTORS =================
-
-        let storedDoctors = JSON.parse(localStorage.getItem("doctors"));
+        const storedDoctors = JSON.parse(localStorage.getItem("doctors"));
 
         if (!storedDoctors) {
-            // First time load → seed from defaultDoctors
             localStorage.setItem("doctors", JSON.stringify(defaultDoctors));
             this.doctors = defaultDoctors;
         } else {
             this.doctors = storedDoctors;
         }
-
-        // ================= DOM ELEMENTS =================
 
         this.doctorContainer = document.getElementById("doctor-container");
         this.slotContainer = document.getElementById("slot-container");
@@ -23,25 +17,47 @@ class HospitalApp {
         this.dateInput = document.getElementById("appointment-date");
         this.slotsSection = document.querySelector(".slots-section");
 
-        // ================= STATE =================
+        this.nameInput = document.getElementById("patient-name");
+        this.ageInput = document.getElementById("patient-age");
+        this.phoneInput = document.getElementById("patient-phone");
+
+        this.themeToggleBtn = document.getElementById("theme-toggle");
+        this.consultantInput = document.getElementById("consultant-input");
+        this.consultantSendBtn = document.getElementById("consultant-send");
+        this.consultantResponse = document.getElementById("consultant-response");
+
+        this.searchInput = document.getElementById("doctor-search");
+        this.chipContainer = document.getElementById("specialization-chips");
+        this.clearFiltersBtn = document.getElementById("clear-doctor-filters");
+
+        this.stepperItems = Array.from(document.querySelectorAll(".step-item"));
+        this.toastContainer = document.getElementById("toast-container");
 
         this.selectedDoctor = null;
         this.selectedSlot = null;
         this.selectedDate = null;
 
+        this.selectedSpecialization = "All";
+        this.searchTerm = "";
+
         this.init();
     }
 
     init() {
+        this.renderFilterChips();
         this.renderDoctors();
         this.handleFormSubmit();
         this.handleHeroScroll();
         this.scrollAppointment();
         this.handleDateChange();
         this.setMinDate();
+        this.setInputConstraints();
+        this.initTheme();
+        this.initConsultantChat();
+        this.initDoctorFilters();
+        this.initStepper();
+        this.bindPatientInputProgress();
     }
-
-    // ================= DISABLE PAST DATES =================
 
     setMinDate() {
         const today = new Date().toISOString().split("T")[0];
@@ -50,14 +66,22 @@ class HospitalApp {
         }
     }
 
-    // ================= HERO SCROLL =================
+    setInputConstraints() {
+        if (this.ageInput) {
+            this.ageInput.min = "1";
+            this.ageInput.max = "120";
+        }
+        if (this.phoneInput) {
+            this.phoneInput.maxLength = 14;
+            this.phoneInput.placeholder = "10 digit number or +91XXXXXXXXXX";
+        }
+    }
 
     handleHeroScroll() {
         const btn = document.getElementById("scrollToDoctors");
         if (btn) {
             btn.addEventListener("click", () => {
-                document.getElementById("doctors")
-                    .scrollIntoView({ behavior: "smooth" });
+                document.getElementById("doctors").scrollIntoView({ behavior: "smooth" });
             });
         }
     }
@@ -66,20 +90,82 @@ class HospitalApp {
         const btn = document.getElementById("scrollToAppointment");
         if (btn) {
             btn.addEventListener("click", () => {
-                document.getElementById("appointment")
-                    .scrollIntoView({ behavior: "smooth" });
+                document.getElementById("appointment").scrollIntoView({ behavior: "smooth" });
             });
         }
     }
 
-    // ================= DATE CHANGE =================
+    initDoctorFilters() {
+        if (this.searchInput) {
+            this.searchInput.addEventListener("input", (e) => {
+                this.searchTerm = e.target.value.trim().toLowerCase();
+                this.renderDoctors();
+            });
+        }
+
+        if (this.clearFiltersBtn) {
+            this.clearFiltersBtn.addEventListener("click", () => {
+                this.selectedSpecialization = "All";
+                this.searchTerm = "";
+
+                if (this.searchInput) {
+                    this.searchInput.value = "";
+                }
+
+                this.renderFilterChips();
+                this.renderDoctors();
+                this.showToast("Doctor filters reset.", "info");
+            });
+        }
+    }
+
+    renderFilterChips() {
+        if (!this.chipContainer) return;
+
+        const specializations = [
+            "All",
+            ...new Set(this.doctors.map((doctor) => doctor.specialization))
+        ];
+
+        this.chipContainer.innerHTML = "";
+
+        specializations.forEach((specialization) => {
+            const chip = document.createElement("button");
+            chip.type = "button";
+            chip.className = "filter-chip";
+            chip.textContent = specialization;
+
+            if (specialization === this.selectedSpecialization) {
+                chip.classList.add("active");
+            }
+
+            chip.addEventListener("click", () => {
+                this.selectedSpecialization = specialization;
+                this.renderFilterChips();
+                this.renderDoctors();
+            });
+
+            this.chipContainer.appendChild(chip);
+        });
+    }
+
+    getFilteredDoctors() {
+        return this.doctors.filter((doctor) => {
+            const specializationMatch =
+                this.selectedSpecialization === "All" ||
+                doctor.specialization === this.selectedSpecialization;
+
+            const searchableText = `${doctor.name} ${doctor.specialization}`.toLowerCase();
+            const searchMatch = searchableText.includes(this.searchTerm);
+
+            return specializationMatch && searchMatch;
+        });
+    }
 
     handleDateChange() {
-
         if (!this.dateInput) return;
 
         this.dateInput.addEventListener("change", (e) => {
-
             this.selectedDate = e.target.value;
             this.selectedSlot = null;
 
@@ -87,21 +173,30 @@ class HospitalApp {
                 this.renderSlots(this.selectedDoctor);
                 this.slotsSection.scrollIntoView({ behavior: "smooth" });
             }
+
+            this.updateStepper();
         });
     }
 
-    // ================= RENDER DOCTORS =================
-
     renderDoctors() {
-
         if (!this.doctorContainer) return;
+
+        const filteredDoctors = this.getFilteredDoctors();
 
         this.doctorContainer.innerHTML = "";
 
-        this.doctors.forEach((doctor) => {
+        if (filteredDoctors.length === 0) {
+            this.doctorContainer.innerHTML = "<p class='empty-state'>No doctors match your search/filter.</p>";
+            return;
+        }
 
+        filteredDoctors.forEach((doctor) => {
             const card = document.createElement("div");
             card.classList.add("doctor-card");
+
+            if (this.selectedDoctor && this.selectedDoctor.id === doctor.id) {
+                card.classList.add("selected");
+            }
 
             card.innerHTML = `
                 <div class="doctor-img">
@@ -109,31 +204,25 @@ class HospitalApp {
                 </div>
                 <h3>${doctor.name}</h3>
                 <p>${doctor.specialization}</p>
-                <p>Experience: ${doctor.experience} years</p>
-                <p>Fee: ₹${doctor.fee}</p>
-                <p>⭐ ${doctor.rating}</p>
+                <p>Experience: ${doctor.experience}</p>
+                <p>Fee: Rs. ${doctor.fee}</p>
+                <p>Rating: ${doctor.rating}</p>
             `;
 
             card.addEventListener("click", () => {
-
                 this.selectedDoctor = doctor;
                 this.selectedSlot = null;
 
-                document.querySelectorAll(".doctor-card")
-                    .forEach(c => c.classList.remove("selected"));
-
+                document.querySelectorAll(".doctor-card").forEach((c) => c.classList.remove("selected"));
                 card.classList.add("selected");
 
                 if (this.selectedDate) {
                     this.renderSlots(doctor);
                 } else {
-                    this.slotContainer.innerHTML = `
-                        <p style="color:red; font-weight:600;">
-                            Please select a date first.
-                        </p>
-                    `;
+                    this.slotContainer.innerHTML = "<p style='color:#ffcbcb; font-weight:700;'>Please select a date first.</p>";
                 }
 
+                this.updateStepper();
                 this.slotsSection.scrollIntoView({ behavior: "smooth" });
             });
 
@@ -141,32 +230,24 @@ class HospitalApp {
         });
     }
 
-    // ================= RENDER SLOTS =================
-
     renderSlots(doctor) {
-
         if (!this.slotContainer) return;
 
         this.slotContainer.innerHTML = "";
 
         if (!this.selectedDate) {
-            this.slotContainer.innerHTML = `
-                <p style="color:red; font-weight:600;">
-                    Please select a date first.
-                </p>
-            `;
+            this.slotContainer.innerHTML = "<p style='color:#ffcbcb; font-weight:700;'>Please select a date first.</p>";
             return;
         }
 
-        let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+        const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
 
         doctor.slots.forEach((slotTime) => {
-
             const slot = document.createElement("div");
             slot.classList.add("slot");
             slot.innerText = slotTime;
 
-            const isBooked = bookings.some(booking =>
+            const isBooked = bookings.some((booking) =>
                 booking.doctorId === doctor.id &&
                 booking.date === this.selectedDate &&
                 booking.time === slotTime
@@ -177,75 +258,351 @@ class HospitalApp {
             }
 
             slot.addEventListener("click", () => {
-
                 if (slot.classList.contains("booked")) return;
 
-                document.querySelectorAll(".slot")
-                    .forEach(s => s.classList.remove("active"));
+                document.querySelectorAll(".slot").forEach((s) => s.classList.remove("active"));
 
                 slot.classList.add("active");
                 this.selectedSlot = slotTime;
+                this.updateStepper();
             });
 
             this.slotContainer.appendChild(slot);
         });
     }
 
-    // ================= HANDLE BOOKING =================
+    initStepper() {
+        this.updateStepper();
+    }
+
+    bindPatientInputProgress() {
+        [this.nameInput, this.ageInput, this.phoneInput].forEach((input) => {
+            if (!input) return;
+            input.addEventListener("input", () => this.updateStepper());
+        });
+    }
+
+    hasBasicPatientDetails() {
+        const name = this.nameInput.value.trim();
+        const age = Number(this.ageInput.value);
+        const phoneStatus = this.normalizePhone(this.phoneInput.value);
+
+        return (
+            name.length >= 3 &&
+            /^[a-zA-Z ]+$/.test(name) &&
+            Number.isInteger(age) &&
+            age >= 1 &&
+            age <= 120 &&
+            phoneStatus.valid
+        );
+    }
+
+    updateStepper() {
+        if (!this.stepperItems.length) return;
+
+        const state = [
+            Boolean(this.selectedDoctor),
+            Boolean(this.selectedDate),
+            Boolean(this.selectedSlot),
+            this.hasBasicPatientDetails()
+        ];
+
+        let currentStep = 4;
+        for (let i = 0; i < state.length; i += 1) {
+            if (!state[i]) {
+                currentStep = i + 1;
+                break;
+            }
+        }
+
+        this.stepperItems.forEach((item, index) => {
+            const stepIndex = index + 1;
+            item.classList.remove("active", "completed");
+
+            if (state[index]) {
+                item.classList.add("completed");
+            }
+
+            if (stepIndex === currentStep) {
+                item.classList.add("active");
+            }
+        });
+    }
+
+    validateBookingForm(name, age, phoneRaw) {
+        const trimmedName = name.trim();
+
+        if (!trimmedName || trimmedName.length < 3) {
+            return { ok: false, message: "Please enter full name (minimum 3 characters)." };
+        }
+
+        if (!/^[a-zA-Z ]+$/.test(trimmedName)) {
+            return { ok: false, message: "Name should contain only letters and spaces." };
+        }
+
+        const ageNum = Number(age);
+        if (!Number.isInteger(ageNum) || ageNum < 1 || ageNum > 120) {
+            return { ok: false, message: "Age must be a whole number between 1 and 120." };
+        }
+
+        const normalizedPhone = this.normalizePhone(phoneRaw);
+        if (!normalizedPhone.valid) {
+            return { ok: false, message: "Enter valid phone: 10 digits or +91 followed by 10 digits." };
+        }
+
+        if (!this.selectedDate) {
+            return { ok: false, message: "Please select appointment date." };
+        }
+
+        const selectedDateObj = new Date(`${this.selectedDate}T00:00:00`);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        if (selectedDateObj < today) {
+            return { ok: false, message: "Past dates are not allowed." };
+        }
+
+        if (!this.selectedDoctor) {
+            return { ok: false, message: "Please select a doctor first." };
+        }
+
+        if (!this.selectedSlot) {
+            return { ok: false, message: "Please select an available time slot." };
+        }
+
+        return {
+            ok: true,
+            normalizedName: trimmedName,
+            normalizedAge: ageNum,
+            normalizedPhone: normalizedPhone.value
+        };
+    }
+
+    normalizePhone(phoneRaw) {
+        const cleaned = phoneRaw.replace(/\s+/g, "").replace(/-/g, "");
+
+        if (/^\d{10}$/.test(cleaned)) {
+            return { valid: true, value: cleaned };
+        }
+
+        if (/^\+91\d{10}$/.test(cleaned)) {
+            return { valid: true, value: cleaned };
+        }
+
+        if (/^91\d{10}$/.test(cleaned)) {
+            return { valid: true, value: `+${cleaned}` };
+        }
+
+        return { valid: false, value: "" };
+    }
 
     handleFormSubmit() {
-
         if (!this.form) return;
 
         this.form.addEventListener("submit", (e) => {
-
             e.preventDefault();
 
-            const name = document.getElementById("patient-name").value;
-            const age = document.getElementById("patient-age").value;
-            const phone = document.getElementById("patient-phone").value;
+            const name = this.nameInput.value;
+            const age = this.ageInput.value;
+            const phone = this.phoneInput.value;
 
-            if (!this.selectedDoctor || !this.selectedSlot || !this.selectedDate) {
-                alert("Please select doctor, date and slot first!");
+            const validation = this.validateBookingForm(name, age, phone);
+            if (!validation.ok) {
+                this.showMessage(validation.message, "error");
+                this.showToast(validation.message, "error");
                 return;
             }
 
-            let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+            const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+
+            const alreadyBooked = bookings.some((booking) =>
+                booking.doctorId === this.selectedDoctor.id &&
+                booking.date === this.selectedDate &&
+                booking.time === this.selectedSlot
+            );
+
+            if (alreadyBooked) {
+                const message = "This slot was just booked. Please pick another slot.";
+                this.showMessage(message, "error");
+                this.showToast(message, "error");
+                this.renderSlots(this.selectedDoctor);
+                return;
+            }
 
             const newBooking = {
                 id: Date.now(),
                 doctorId: this.selectedDoctor.id,
                 doctorName: this.selectedDoctor.name,
-                patientName: name,
-                age: age,
-                phone: phone,
+                patientName: validation.normalizedName,
+                age: validation.normalizedAge,
+                phone: validation.normalizedPhone,
                 date: this.selectedDate,
                 time: this.selectedSlot
             };
 
             bookings.push(newBooking);
-
             localStorage.setItem("bookings", JSON.stringify(bookings));
 
-            this.confirmationMessage.innerHTML = `
-                <i class="fa-solid fa-circle-check"></i>
-                Appointment Confirmed! <br>
-                Doctor: ${this.selectedDoctor.name} <br>
-                Date: ${this.selectedDate} <br>
-                Slot: ${this.selectedSlot} <br>
-                Patient: ${name}
-            `;
+            const successMessage = `Appointment Confirmed! Doctor: ${this.selectedDoctor.name} | Date: ${this.selectedDate} | Slot: ${this.selectedSlot} | Patient: ${validation.normalizedName}`;
+            this.showMessage(successMessage, "success");
+            this.showToast("Appointment booked successfully.", "success");
 
             this.form.reset();
             this.selectedSlot = null;
-
             this.renderSlots(this.selectedDoctor);
+            this.updateStepper();
         });
+    }
+
+    showMessage(message, type) {
+        if (!this.confirmationMessage) return;
+
+        this.confirmationMessage.textContent = message;
+        this.confirmationMessage.classList.remove("success-message", "error-message");
+        this.confirmationMessage.classList.add(type === "success" ? "success-message" : "error-message");
+    }
+
+    showToast(message, type = "info") {
+        if (!this.toastContainer) return;
+
+        const toast = document.createElement("div");
+        toast.className = `toast toast-${type}`;
+
+        const iconMap = {
+            success: "fa-circle-check",
+            error: "fa-circle-xmark",
+            info: "fa-circle-info"
+        };
+
+        const iconClass = iconMap[type] || iconMap.info;
+        toast.innerHTML = `<i class="fa-solid ${iconClass}"></i><span>${message}</span>`;
+
+        this.toastContainer.appendChild(toast);
+
+        setTimeout(() => {
+            toast.classList.add("hide");
+            setTimeout(() => toast.remove(), 280);
+        }, 3200);
+    }
+
+    initTheme() {
+        if (!this.themeToggleBtn) return;
+
+        const savedTheme = localStorage.getItem("themePreference") || "dark";
+        this.applyTheme(savedTheme);
+
+        this.themeToggleBtn.addEventListener("click", () => {
+            const current = document.body.classList.contains("theme-light") ? "light" : "dark";
+            const nextTheme = current === "light" ? "dark" : "light";
+            this.applyTheme(nextTheme);
+            localStorage.setItem("themePreference", nextTheme);
+        });
+    }
+
+    applyTheme(theme) {
+        const icon = this.themeToggleBtn.querySelector("i");
+        const text = this.themeToggleBtn.querySelector("span");
+
+        if (theme === "light") {
+            document.body.classList.add("theme-light");
+            icon.className = "fa-solid fa-sun";
+            text.textContent = "Light";
+            return;
+        }
+
+        document.body.classList.remove("theme-light");
+        icon.className = "fa-solid fa-moon";
+        text.textContent = "Dark";
+    }
+
+    initConsultantChat() {
+        if (!this.consultantSendBtn || !this.consultantInput || !this.consultantResponse) return;
+
+        const handleConsultation = () => {
+            const message = this.consultantInput.value.trim();
+
+            if (message.length < 4) {
+                this.consultantResponse.innerHTML = "<p class='consultant-bubble consultant-error'>Please describe your symptoms in a bit more detail.</p>";
+                return;
+            }
+
+            const matches = this.findDoctorMatches(message);
+
+            if (matches.length === 0) {
+                this.consultantResponse.innerHTML = `
+                    <div class="consultant-bubble">
+                        <p>I could not map your symptoms exactly. Start with a General Physician:</p>
+                        <p><strong>${this.getGeneralPhysicianName()}</strong></p>
+                    </div>
+                `;
+                return;
+            }
+
+            const suggestions = matches
+                .slice(0, 3)
+                .map((doctor) => `<li><strong>${doctor.name}</strong> - ${doctor.specialization}</li>`)
+                .join("");
+
+            this.consultantResponse.innerHTML = `
+                <div class="consultant-bubble">
+                    <p>Based on your symptoms, suggested doctors:</p>
+                    <ul>${suggestions}</ul>
+                    <p class="consultant-note">Please choose one doctor card above to continue booking.</p>
+                </div>
+            `;
+        };
+
+        this.consultantSendBtn.addEventListener("click", handleConsultation);
+
+        this.consultantInput.addEventListener("keydown", (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+                handleConsultation();
+            }
+        });
+    }
+
+    findDoctorMatches(symptomsText) {
+        const text = symptomsText.toLowerCase();
+
+        const map = {
+            Cardiologist: ["chest", "heart", "bp", "blood pressure", "palpit", "cardiac"],
+            Dermatologist: ["skin", "rash", "acne", "itch", "allergy", "pigment"],
+            Orthopedic: ["bone", "joint", "knee", "back pain", "fracture", "shoulder"],
+            Pediatrician: ["child", "kid", "baby", "newborn", "infant", "vaccination"],
+            Neurologist: ["headache", "migraine", "seizure", "brain", "numb", "nerve"],
+            Gynecologist: ["pregnan", "period", "pcos", "women", "uterus", "ovary"],
+            "ENT Specialist": ["ear", "nose", "throat", "sinus", "tonsil", "hearing"],
+            Psychiatrist: ["anxiety", "depression", "stress", "sleep", "panic", "mental"],
+            "General Physician": ["fever", "cold", "cough", "infection", "weakness", "viral"],
+            Oncologist: ["cancer", "tumor", "chemotherapy", "oncology", "lump"]
+        };
+
+        const matchedSpecializations = Object.keys(map).filter((specialization) =>
+            map[specialization].some((keyword) => text.includes(keyword))
+        );
+
+        const unique = [];
+
+        matchedSpecializations.forEach((specialization) => {
+            const found = this.doctors.find(
+                (doc) => doc.specialization.toLowerCase() === specialization.toLowerCase()
+            );
+
+            if (found && !unique.some((existing) => existing.id === found.id)) {
+                unique.push(found);
+            }
+        });
+
+        return unique;
+    }
+
+    getGeneralPhysicianName() {
+        const fallback = this.doctors.find(
+            (doc) => doc.specialization.toLowerCase() === "general physician"
+        );
+
+        return fallback ? `${fallback.name} (${fallback.specialization})` : "General Physician";
     }
 }
 
-// ================= START APP =================
-
-document.addEventListener("DOMContentLoaded", () => {
-    new HospitalApp();
-});
+new HospitalApp();

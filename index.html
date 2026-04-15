@@ -5,22 +5,25 @@
     <title>Hospital Management System</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <!-- CSS Files -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
 
-    <!-- ================= NAVBAR ================= -->
     <header>
         <nav class="navbar">
             <div class="logo">
                 <i class="fa-solid fa-hospital"></i> City Hospital
             </div>
+
+            <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle theme">
+                <i class="fa-solid fa-moon"></i>
+                <span>Dark</span>
+            </button>
+
             <ul class="nav-links">
                 <li>
                     <a href="#">
@@ -38,70 +41,71 @@
                     </a>
                 </li>
                 <li>
+                    <a href="#consultant">
+                        <i class="fa-solid fa-comments"></i> Consultant
+                    </a>
+                </li>
+                <li>
                     <a href="#contact">
                         <i class="fa-solid fa-phone"></i> Contact
                     </a>
                 </li>
-
                 <li>
                     <a href="modal.html" id="admin-link" class="admin-link" target="_self">
-                    <i class="fa-solid fa-user-shield"></i>
-                    Admin Dashboard
+                        <i class="fa-solid fa-user-shield"></i>
+                        Admin Dashboard
                     </a>
                 </li>
             </ul>
         </nav>
     </header>
 
+    <section class="hero">
+        <div class="hero-content">
+            <h1>
+                <i class="fa-solid fa-hospital-user"></i>
+                Smart & Easy Hospital Appointments
+            </h1>
 
-    <!-- ================= HERO SECTION ================= -->
-<section class="hero">
-    <div class="hero-content">
-        
-        <h1>
-            <i class="fa-solid fa-hospital-user"></i>
-            Smart & Easy Hospital Appointments
-        </h1>
+            <p>
+                Choose your doctor, check availability, and book your appointment in seconds.
+            </p>
 
-        <p>
-            Choose your doctor, check availability, and book your appointment in seconds.
-        </p>
+            <div class="hero-buttons">
+                <button id="scrollToDoctors" class="primary-btn">
+                    <i class="fa-solid fa-user-doctor"></i>
+                    View Doctors
+                </button>
 
-        <div class="hero-buttons">
-            <button id="scrollToDoctors" class="primary-btn">
-                <i class="fa-solid fa-user-doctor"></i>
-                View Doctors
-            </button>
-
-            <button id="scrollToAppointment" class="secondary-btn">
-                <i class="fa-solid fa-calendar-check"></i>
-                Book Appointment
-            </button>
+                <button id="scrollToAppointment" class="secondary-btn">
+                    <i class="fa-solid fa-calendar-check"></i>
+                    Book Appointment
+                </button>
+            </div>
         </div>
+    </section>
 
-    </div>
-</section>
-
-
-    <!-- ================= DOCTORS SECTION ================= -->
     <section id="doctors" class="doctors-section">
         <h2>
             <i class="fa-solid fa-user-doctor"></i>
             Our Doctors
         </h2>
-        <div id="doctor-container">
-            <!-- Doctors will be dynamically inserted here -->
+
+        <div class="doctor-tools">
+            <input id="doctor-search" class="doctor-search" type="text" placeholder="Search doctor by name or specialization">
+            <div id="specialization-chips" class="chip-group"></div>
+            <button id="clear-doctor-filters" class="filter-reset" type="button">Clear Filters</button>
         </div>
+
+        <div id="doctor-container"></div>
     </section>
 
-
-    <!-- ================= SLOT SECTION ================= -->
     <section class="slots-section">
         <h2>
             <i class="fa-solid fa-clock"></i>
             Available Slots
         </h2>
-         <!-- DATE PICKER -->
+
         <div class="date-picker">
             <label for="appointment-date">
                 <i class="fa-solid fa-calendar-days"></i>
@@ -110,21 +114,59 @@
             <input type="date" id="appointment-date">
         </div>
 
-        <div id="slot-container">
-            <!-- Slots will appear here after selecting doctor -->
+        <div id="slot-container"></div>
+    </section>
+
+    <section id="consultant" class="consultant-section">
+        <h2>
+            <i class="fa-solid fa-comments"></i>
+            Chat With Consultant
+        </h2>
+
+        <div class="consultant-card">
+            <p class="consultant-subtext">Tell your symptoms and get doctor suggestions instantly.</p>
+
+            <textarea
+                id="consultant-input"
+                placeholder="Example: chest pain, breathing issue, high BP"
+                rows="4"
+            ></textarea>
+
+            <button id="consultant-send" type="button" class="primary-btn consultant-btn">
+                <i class="fa-solid fa-paper-plane"></i>
+                Get Suggestion
+            </button>
+
+            <div id="consultant-response" class="consultant-response"></div>
         </div>
     </section>
 
-
-    <!-- ================= APPOINTMENT FORM ================= -->
     <section id="appointment" class="appointment-section">
         <h2>
             <i class="fa-solid fa-notes-medical"></i>
             Book Appointment
         </h2>
 
-        <form id="appointment-form">
+        <div id="booking-stepper" class="booking-stepper">
+            <div class="step-item" data-step="1">
+                <span class="step-dot">1</span>
+                <span class="step-label">Choose Doctor</span>
+            </div>
+            <div class="step-item" data-step="2">
+                <span class="step-dot">2</span>
+                <span class="step-label">Pick Date</span>
+            </div>
+            <div class="step-item" data-step="3">
+                <span class="step-dot">3</span>
+                <span class="step-label">Select Slot</span>
+            </div>
+            <div class="step-item" data-step="4">
+                <span class="step-dot">4</span>
+                <span class="step-label">Patient Details</span>
+            </div>
+        </div>
 
+        <form id="appointment-form">
             <div class="form-group">
                 <label for="patient-name">
                     <i class="fa-solid fa-user"></i> Full Name
@@ -146,7 +188,6 @@
                 <input type="tel" id="patient-phone" required>
             </div>
 
-            <!-- Hidden fields -->
             <input type="hidden" id="selected-doctor">
             <input type="hidden" id="selected-slot">
 
@@ -156,27 +197,22 @@
         </form>
     </section>
 
-
-    <!-- ================= CONFIRMATION SECTION ================= -->
     <section class="confirmation-section">
         <div id="confirmation-message"></div>
     </section>
 
-
-    <!-- ================= FOOTER ================= -->
     <footer id="contact">
         <p>
             <i class="fa-solid fa-truck-medical"></i>
             Emergency: +91 9876543210
         </p>
-        <p>© 2026 City Hospital. All Rights Reserved.</p>
+        <p>&copy; 2026 City Hospital. All Rights Reserved.</p>
     </footer>
 
+    <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
 
-    <!-- JS Files -->
     <script src="js/data.js"></script>
     <script src="js/main.js"></script>
-    
 
 </body>
 </html>
