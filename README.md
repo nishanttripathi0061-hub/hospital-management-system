@@ -1,4 +1,4 @@
-# 🏥 Hospital Management System
+# Hospital Management System
 
 ![HTML](https://img.shields.io/badge/HTML-5-orange)
 ![CSS](https://img.shields.io/badge/CSS-3-blue)
@@ -6,114 +6,93 @@
 ![Responsive](https://img.shields.io/badge/Responsive-Yes-green)
 ![Status](https://img.shields.io/badge/Project-Frontend--Only-lightgrey)
 
-A fully responsive **Hospital Management System** built using **HTML, CSS, and Vanilla JavaScript**.
+A frontend-only Hospital Management System built with HTML, CSS, and Vanilla JavaScript.
 
-This project demonstrates dynamic UI rendering, state management, slot booking logic, and local storage integration — without using any frontend frameworks.
+It includes a patient-facing booking flow and an admin dashboard, with all data persisted in browser localStorage.
 
----
-
-## 🚀 Live Demo
+## Live Demo
 
 https://hospital-managment-system-front.netlify.app/
 
----
+## Features
 
-## 📌 Features
+### Patient Side
+- Doctor cards rendered dynamically from stored data.
+- Search doctor by name/specialization.
+- Filter doctors by specialization chips.
+- Date-based slot availability with instant booked-slot lock.
+- Appointment booking with validation:
+- Name: letters/spaces, minimum 3 characters.
+- Age: integer from 1 to 120.
+- Phone: 10 digits or `+91` + 10 digits.
+- Booking progress stepper (choose doctor -> date -> slot -> patient details).
+- Toast notifications for success/error/info states.
+- Symptom helper ("Chat With Consultant") suggesting relevant doctors.
+- Dark/light theme toggle stored in localStorage.
 
-### 👨‍⚕️ Doctor Listing
-- 10 professional doctors
-- Displays specialization, experience, consultation fee & rating
-- Dynamically rendered using JavaScript
+### Admin Side
+- Password-protected entry page (`modal.html`).
+- Dashboard stats:
+- Total doctors
+- Total bookings
+- Today's bookings
+- Manage doctors (view + delete).
+- Add new doctor (name, specialization, experience, fee, rating, image, slots).
+- Manage bookings (view + cancel).
+- Mobile sidebar toggle in admin pages.
 
-### ⏰ Slot Availability System
-- Each doctor has unique time slots
-- Available slots shown in **Green**
-- Booked slots shown in **Red**
-- Disabled slots cannot be clicked again
+## Tech Stack
 
-### 📅 Appointment Booking
-- User inputs Name, Age & Phone Number
-- Selected doctor & slot auto-linked
-- Confirmation message displayed dynamically
+- HTML5
+- CSS3
+- Vanilla JavaScript (ES6)
+- Browser localStorage (client-side persistence)
 
-### 💾 Local Storage Integration
-- Booked slots persist even after page refresh
-- Uses browser `localStorage`
+## Local Storage Keys
 
-### 📱 Fully Responsive
-- Desktop optimized
-- Tablet friendly
-- Mobile responsive using media queries
+- `doctors`: doctor master list (seeded from `defaultDoctors` when missing)
+- `bookings`: booked appointments
+- `adminLoggedIn`: simple admin auth flag
+- `themePreference`: patient UI theme
 
----
+## Project Structure
 
-## 🧠 Concepts Implemented
+```text
+hospital_management/
+|-- index.html
+|-- modal.html
+|-- admin-dashboard.html
+|-- admin-doctors.html
+|-- admin-add-doctor.html
+|-- admin-bookings.html
+|-- css/
+|   |-- style.css
+|   |-- layout.css
+|   |-- responsive.css
+|   `-- admin.css
+|-- js/
+|   |-- data.js
+|   |-- main.js
+|   |-- admin.js
+|   `-- modal.js
+`-- assets/
+    `-- images/
+```
 
-- DOM Manipulation
-- Dynamic Rendering
-- Array of Objects (Nested Data Structure)
-- Event Handling
-- State Management
-- Local Storage API
-- Flexbox Layout
-- Responsive Design
+## How To Run
 
----
+1. Clone/download the project.
+2. Open `index.html` in your browser.
+3. For admin pages, open `modal.html`.
 
-## 🏗 Project Structure
+Admin password (current code): `admin123`
 
-hospital-management/
-│
-├── index.html
-│
-├── css/
-│ ├── style.css
-│ ├── layout.css
-│ └── responsive.css
-│
-├── js/
-│ ├── data.js
-│ ├── slots.js
-│ ├── booking.js
-│ └── main.js
-│
-└── assets/
+## Notes
 
----
+- This is a frontend-only project; no backend/database is used.
+- Admin password is hardcoded in `js/modal.js` for demo purposes.
+- To reset app state, clear site data/localStorage in browser devtools.
 
-## 🎯 Learning Outcome
+## Author
 
-This project focuses on:
-
-- Building a data-driven UI
-- Understanding separation of concerns
-- Implementing dynamic state updates
-- Creating scalable frontend architecture
-- Writing clean, modular JavaScript
-
----
-
-## 🔮 Future Enhancements
-
-- Backend API integration
-
----
-
-## 🛠 Tech Stack
-
-- **HTML5**
-- **CSS3**
-- **Vanilla JavaScript (ES6)**
-
----
-
-## 👨‍💻 Author
-
-Developed by **Nishant** 🚀  
-Frontend Developer in progress.
-
----
-
-## ⭐ If you like this project
-
-Give it a ⭐ on GitHub and support the work!
+Developed by Nishant.
