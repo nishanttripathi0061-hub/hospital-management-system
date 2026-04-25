@@ -27,25 +27,61 @@
     display: block;
 }
 
+.hero .section-shell {
+    display: flex;
+    justify-content: center;
+}
+
 .hero-grid {
     display: grid;
     grid-template-columns: 1.2fr 0.8fr;
     gap: 24px;
     align-items: stretch;
+    perspective: 1200px;
 }
 
 .hero-content {
+    width: 100%;
     max-width: 690px;
+    margin: 0 auto;
     align-self: center;
 }
 
 .hero-panel {
-    background: rgba(255, 255, 255, 0.92);
+    position: relative;
+    overflow: hidden;
+    background: var(--glass-bg-strong);
     border: 1px solid rgba(18, 36, 58, 0.12);
-    border-radius: 18px;
-    padding: 20px;
+    border-radius: var(--surface-radius-lg);
+    padding: 24px;
     color: #17314f;
-    box-shadow: 0 16px 32px rgba(6, 22, 38, 0.2);
+    box-shadow: var(--surface-shadow);
+    transform-style: preserve-3d;
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.hero-panel::after {
+    content: '';
+    position: absolute;
+    inset: -40% -60%;
+    background: linear-gradient(120deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.38), rgba(255, 255, 255, 0));
+    transform: rotate(18deg) translateX(-55%);
+    transition: transform 0.45s ease;
+    pointer-events: none;
+}
+
+.hero-panel:hover {
+    transform: rotateY(-5deg) rotateX(3deg) translateY(-5px);
+    box-shadow: 0 24px 42px rgba(6, 22, 38, 0.28);
+}
+
+.hero-panel:hover::after {
+    transform: rotate(18deg) translateX(25%);
+}
+
+.hero-panel > * {
+    position: relative;
+    z-index: 1;
 }
 
 .hero-panel h3 {
@@ -61,9 +97,13 @@
 
 .metric-item {
     border: 1px solid rgba(18, 36, 58, 0.1);
-    border-radius: 12px;
-    padding: 10px;
+    border-radius: var(--surface-radius);
+    padding: 12px;
     background: rgba(255, 255, 255, 0.76);
+    min-height: 82px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .metric-value {
@@ -80,7 +120,7 @@
     color: #4f647d;
 }
 
-.hero-note {
+.hero .hero-panel .hero-note {
     margin-top: 12px;
     font-size: 0.9rem;
     color: #45617d;
@@ -114,13 +154,14 @@
 
 #doctor-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 18px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
     align-items: stretch;
 }
 
 #doctor-container .doctor-card {
     width: 100%;
+    max-width: none;
 }
 
 /* ================= SLOT LAYOUT ================= */
@@ -152,11 +193,11 @@ form {
 }
 
 .booking-summary {
-    background: rgba(255, 255, 255, 0.9);
+    background: var(--glass-bg-strong);
     border: 1px solid rgba(18, 36, 58, 0.12);
-    border-radius: 16px;
-    padding: 20px;
-    box-shadow: 0 16px 32px rgba(6, 22, 38, 0.18);
+    border-radius: var(--surface-radius-lg);
+    padding: 24px;
+    box-shadow: var(--surface-shadow);
     color: #17314f;
 }
 

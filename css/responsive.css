@@ -23,20 +23,81 @@
     .booking-summary {
         order: -1;
     }
+
+    #doctor-container {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* ================= LAPTOP ================= */
+@media (max-width: 1200px) and (min-width: 769px) {
+    .navbar {
+        padding-inline: 5%;
+        gap: 10px;
+    }
+
+    .nav-links {
+        gap: 14px;
+    }
+
+    .nav-links a {
+        font-size: 0.93rem;
+    }
+
+    .theme-toggle {
+        padding: 7px 12px;
+    }
 }
 
 /* ================= MOBILE ================= */
 @media (max-width: 768px) {
     .navbar {
-        flex-direction: column;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
         gap: 10px;
         padding-inline: 5%;
     }
 
+    .logo {
+        order: 1;
+        font-size: 1.22rem;
+    }
+
+    .theme-toggle {
+        order: 2;
+        margin-left: auto;
+    }
+
+    .nav-toggle {
+        display: inline-flex;
+        order: 3;
+        flex-shrink: 0;
+    }
+
     .nav-links {
+        display: none;
+        order: 4;
+        width: 100%;
         flex-direction: column;
-        align-items: center;
+        align-items: stretch;
         gap: 10px;
+        padding-top: 2px;
+    }
+
+    .navbar.menu-open .nav-links {
+        display: flex;
+    }
+
+    .nav-links li,
+    .nav-links a {
+        width: 100%;
+    }
+
+    .nav-links a {
+        display: block;
+        text-align: center;
+        padding: 8px 10px;
     }
 
     .section-shell {
@@ -64,6 +125,14 @@
         position: static;
     }
 
+    #doctor-container {
+        grid-template-columns: 1fr;
+    }
+
+    #doctor-container .doctor-card {
+        max-width: none;
+    }
+
     form {
         width: 100%;
         padding: 22px;
@@ -77,6 +146,10 @@
 
 /* ================= SMALL MOBILE ================= */
 @media (max-width: 480px) {
+    .logo {
+        font-size: 1.08rem;
+    }
+
     .hero h1 {
         font-size: 1.65rem;
     }
@@ -96,10 +169,6 @@
 }
 
 @media (max-width: 768px) {
-    .theme-toggle {
-        order: 3;
-    }
-
     .consultant-card {
         padding: 18px;
     }
@@ -107,8 +176,12 @@
 
 @media (max-width: 480px) {
     .theme-toggle {
-        width: 100%;
+        width: auto;
         justify-content: center;
+    }
+
+    .theme-toggle span {
+        display: none;
     }
 
     .consultant-btn {
@@ -150,5 +223,26 @@
 
     .filter-reset {
         width: 100%;
+    }
+}
+
+@media (hover: none), (max-width: 768px) {
+    .hero-panel:hover {
+        transform: none;
+        box-shadow: 0 16px 32px rgba(6, 22, 38, 0.2);
+    }
+
+    .hero-panel:hover::after {
+        transform: rotate(18deg) translateX(-55%);
+    }
+
+    .doctor-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 20px 36px rgba(6, 22, 38, 0.24);
+    }
+
+    .primary-btn:hover,
+    .secondary-btn:hover {
+        transform: translateY(-1px);
     }
 }

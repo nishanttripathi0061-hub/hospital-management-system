@@ -24,7 +24,18 @@
                 <span>Dark</span>
             </button>
 
-            <ul class="nav-links">
+            <button
+                id="nav-toggle"
+                class="nav-toggle"
+                type="button"
+                aria-label="Toggle navigation menu"
+                aria-expanded="false"
+                aria-controls="primary-nav"
+            >
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <ul id="primary-nav" class="nav-links">
                 <li>
                     <a href="#">
                         <i class="fa-solid fa-house"></i> Home
@@ -62,50 +73,52 @@
 
     <main class="site-main">
         <section class="hero">
-            <div class="section-shell hero-grid">
-                <div class="hero-content">
-                    <h1>
-                        <i class="fa-solid fa-hospital-user"></i>
-                        Smart & Easy Hospital Appointments
-                    </h1>
+            <div class="section-shell">
+                <div class="hero-grid">
+                    <div class="hero-content">
+                        <h1>
+                            <i class="fa-solid fa-hospital-user"></i>
+                            Smart & Easy Hospital Appointments
+                        </h1>
 
-                    <p>
-                        Choose your doctor, check availability, and book your appointment in seconds.
-                    </p>
+                        <p>
+                            Choose your doctor, check availability, and book your appointment in seconds.
+                        </p>
 
-                    <div class="hero-buttons">
-                        <button id="scrollToDoctors" class="primary-btn">
-                            <i class="fa-solid fa-user-doctor"></i>
-                            View Doctors
-                        </button>
+                        <div class="hero-buttons">
+                            <button id="scrollToDoctors" class="primary-btn">
+                                <i class="fa-solid fa-user-doctor"></i>
+                                View Doctors
+                            </button>
 
-                        <button id="scrollToAppointment" class="secondary-btn">
-                            <i class="fa-solid fa-calendar-check"></i>
-                            Book Appointment
-                        </button>
+                            <button id="scrollToAppointment" class="secondary-btn">
+                                <i class="fa-solid fa-calendar-check"></i>
+                                Book Appointment
+                            </button>
+                        </div>
                     </div>
+
+                    <aside class="hero-panel" aria-label="Trusted care experience highlights">
+                        <h3>Trusted Care Experience</h3>
+                        <div class="hero-metrics">
+                            <div class="metric-item">
+                                <span class="metric-value">24x7</span>
+                                <span class="metric-label">Support Desk</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-value">30+</span>
+                                <span class="metric-label">Specialists</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-value">5 min</span>
+                                <span class="metric-label">Avg Booking Time</span>
+                            </div>
+                        </div>
+                        <p class="hero-note">
+                            Secure appointment management with clear doctor availability and faster patient onboarding.
+                        </p>
+                    </aside>
                 </div>
-
-                <aside class="hero-panel" aria-label="Hospital highlights">
-                    <h3>Trusted Care Experience</h3>
-                    <div class="hero-metrics">
-                        <div class="metric-item">
-                            <span class="metric-value">24x7</span>
-                            <span class="metric-label">Support Desk</span>
-                        </div>
-                        <div class="metric-item">
-                            <span class="metric-value">30+</span>
-                            <span class="metric-label">Specialists</span>
-                        </div>
-                        <div class="metric-item">
-                            <span class="metric-value">5 min</span>
-                            <span class="metric-label">Avg Booking Time</span>
-                        </div>
-                    </div>
-                    <p class="hero-note">
-                        Secure appointment management with clear doctor availability and faster patient onboarding.
-                    </p>
-                </aside>
             </div>
         </section>
 

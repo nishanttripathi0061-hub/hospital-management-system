@@ -1,3 +1,72 @@
+function initStandaloneMobileNav() {
+    const navbar = document.querySelector(".navbar");
+    const navToggleBtn = document.getElementById("nav-toggle");
+    const navLinks = document.querySelector(".nav-links");
+    const navToggleIcon = navToggleBtn ? navToggleBtn.querySelector("i") : null;
+
+    if (!navbar || !navToggleBtn || !navLinks) return;
+
+    const closeMenu = () => {
+        navbar.classList.remove("menu-open");
+        navLinks.classList.remove("menu-open");
+        navToggleBtn.setAttribute("aria-expanded", "false");
+        if (navToggleIcon) {
+            navToggleIcon.className = "fa-solid fa-bars";
+        }
+    };
+
+    const openMenu = () => {
+        navbar.classList.add("menu-open");
+        navLinks.classList.add("menu-open");
+        navToggleBtn.setAttribute("aria-expanded", "true");
+        if (navToggleIcon) {
+            navToggleIcon.className = "fa-solid fa-xmark";
+        }
+    };
+
+    navToggleBtn.setAttribute("aria-expanded", "false");
+
+    navToggleBtn.addEventListener("click", () => {
+        const isOpen = navbar.classList.contains("menu-open");
+        if (isOpen) {
+            closeMenu();
+            return;
+        }
+        openMenu();
+    });
+
+    navLinks.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+            if (window.innerWidth <= 768) {
+                closeMenu();
+            }
+        });
+    });
+
+    document.addEventListener("click", (event) => {
+        const isOpen = navbar.classList.contains("menu-open");
+        if (!isOpen) return;
+
+        if (!navbar.contains(event.target)) {
+            closeMenu();
+        }
+    });
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+            closeMenu();
+        }
+    });
+
+    window.addEventListener("resize", () => {
+        if (window.innerWidth > 768) {
+            closeMenu();
+        }
+    });
+}
+
+initStandaloneMobileNav();
+
 class HospitalApp {
 
     constructor() {
@@ -29,7 +98,6 @@ class HospitalApp {
         this.searchInput = document.getElementById("doctor-search");
         this.chipContainer = document.getElementById("specialization-chips");
         this.clearFiltersBtn = document.getElementById("clear-doctor-filters");
-
         this.stepperItems = Array.from(document.querySelectorAll(".step-item"));
         this.toastContainer = document.getElementById("toast-container");
         this.summaryStatus = document.getElementById("summary-status");
@@ -47,6 +115,7 @@ class HospitalApp {
         this.selectedSpecialization = "All";
         this.searchTerm = "";
         this.scrollObserver = null;
+        this.themeTransitionTimer = null;
 
         this.init();
     }
@@ -581,7 +650,7 @@ class HospitalApp {
         if (!this.themeToggleBtn) return;
 
         const savedTheme = localStorage.getItem("themePreference") || "dark";
-        this.applyTheme(savedTheme);
+        this.applyTheme(savedTheme, true);
 
         this.themeToggleBtn.addEventListener("click", () => {
             const current = document.body.classList.contains("theme-light") ? "light" : "dark";
@@ -591,9 +660,20 @@ class HospitalApp {
         });
     }
 
-    applyTheme(theme) {
+    applyTheme(theme, skipAnimation = false) {
         const icon = this.themeToggleBtn.querySelector("i");
         const text = this.themeToggleBtn.querySelector("span");
+
+        if (!skipAnimation) {
+            document.body.classList.add("theme-switching");
+            if (this.themeTransitionTimer) {
+                clearTimeout(this.themeTransitionTimer);
+            }
+            this.themeTransitionTimer = setTimeout(() => {
+                document.body.classList.remove("theme-switching");
+                this.themeTransitionTimer = null;
+            }, 500);
+        }
 
         if (theme === "light") {
             document.body.classList.add("theme-light");

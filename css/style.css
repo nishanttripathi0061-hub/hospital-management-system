@@ -13,6 +13,13 @@
     --text-soft: #4b5b6f;
     --line: rgba(18, 36, 58, 0.12);
     --shadow-soft: 0 18px 40px rgba(6, 22, 38, 0.2);
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-bg-strong: rgba(255, 255, 255, 0.9);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --surface-radius: 16px;
+    --surface-radius-lg: 18px;
+    --surface-padding: 20px;
+    --surface-shadow: 0 16px 32px rgba(6, 22, 38, 0.2);
 }
 
 /* ================= RESET ================= */
@@ -35,6 +42,7 @@ body {
         url('https://images.unsplash.com/photo-1585435557343-3b092031a831?auto=format&fit=crop&w=2000&q=80') center/cover fixed;
     position: relative;
     overflow-x: hidden;
+    transition: color 0.45s ease;
 }
 
 body::before {
@@ -47,6 +55,38 @@ body::before {
         radial-gradient(circle at 70% 88%, rgba(255, 255, 255, 0.1), transparent 30%);
     pointer-events: none;
     z-index: -1;
+    opacity: 1;
+    transition: opacity 0.6s ease;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+        linear-gradient(120deg, rgba(230, 244, 255, 0.88), rgba(208, 232, 255, 0.8)),
+        url('https://images.unsplash.com/photo-1587351021759-3e566b3db4f6?auto=format&fit=crop&w=2000&q=80') center/cover fixed;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+
+body.theme-light::before {
+    opacity: 0;
+}
+
+body.theme-light::after {
+    opacity: 1;
+}
+
+body.theme-switching,
+body.theme-switching *,
+body.theme-switching *::before,
+body.theme-switching *::after {
+    transition-property: color, background-color, border-color, box-shadow, opacity;
+    transition-duration: 0.45s;
+    transition-timing-function: ease;
 }
 
 /* ================= NAVBAR DESIGN ================= */
@@ -109,6 +149,26 @@ header {
     transform: scaleX(1);
 }
 
+.nav-toggle {
+    display: none;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    background: rgba(255, 255, 255, 0.14);
+    color: #ecf8ff;
+    border-radius: 10px;
+    width: 42px;
+    height: 42px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.05rem;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.nav-toggle:hover {
+    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.25);
+}
+
 /* ================= HERO DESIGN ================= */
 .hero {
     padding: 88px 20px 96px;
@@ -150,6 +210,8 @@ header {
     font-weight: 700;
     cursor: pointer;
     transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+    transform: translateZ(0);
+    will-change: transform;
 }
 
 .hero-buttons {
@@ -174,16 +236,22 @@ header {
 
 .primary-btn:hover,
 .secondary-btn:hover {
-    transform: translateY(-2px);
+    transform: perspective(700px) translateY(-2px) rotateX(-5deg);
 }
 
 .primary-btn:hover {
     background: #27dcb5;
+    box-shadow: 0 14px 26px rgba(30, 200, 165, 0.4);
 }
 
 .secondary-btn:hover {
     background: rgba(255, 255, 255, 0.2);
     box-shadow: 0 10px 24px rgba(7, 20, 37, 0.28);
+}
+
+.primary-btn:active,
+.secondary-btn:active {
+    transform: perspective(700px) translateY(1px) rotateX(0deg) scale(0.99);
 }
 
 /* ================= SECTION COMMON ================= */
@@ -201,51 +269,67 @@ section h2 {
 
 /* ================= DOCTOR CARD ================= */
 .doctor-card {
-    background: var(--card);
+    background: var(--glass-bg-strong);
     border: 1px solid var(--line);
-    padding: 20px;
+    padding: 22px;
     width: 260px;
-    border-radius: 16px;
-    box-shadow: var(--shadow-soft);
+    border-radius: var(--surface-radius-lg);
+    box-shadow: var(--surface-shadow);
     cursor: pointer;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transform-style: preserve-3d;
+    transform: translateZ(0);
+    transition: transform 0.32s ease, box-shadow 0.32s ease, border-color 0.25s ease;
     animation: riseUp 0.55s ease both;
+    will-change: transform;
 }
 
 .doctor-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 22px 44px rgba(6, 22, 38, 0.28);
+    transform: perspective(1100px) translateY(-9px) rotateX(6deg) rotateY(-4deg);
+    box-shadow: 0 28px 48px rgba(6, 22, 38, 0.3);
 }
 
 .doctor-card h3 {
     margin-bottom: 10px;
     font-size: 1.08rem;
+    line-height: 1.35;
+    min-height: 2.8em;
 }
 
 .doctor-card p {
     font-size: 0.9rem;
     color: var(--text-soft);
-    margin-top: 4px;
+    margin-top: 5px;
+    line-height: 1.45;
+}
+
+.doctor-card p:last-child {
+    margin-top: auto;
+    padding-top: 10px;
 }
 
 .doctor-img {
     width: 100%;
-    height: 185px;
+    height: 190px;
     overflow: hidden;
-    border-radius: 11px;
-    margin-bottom: 12px;
+    border-radius: 12px;
+    margin-bottom: 14px;
+    transform: translateZ(14px);
 }
 
 .doctor-img img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: top;
+    object-position: center;
     transition: transform 0.35s ease;
 }
 
 .doctor-card:hover img {
-    transform: scale(1.06);
+    transform: scale(1.07) translateZ(16px);
 }
 
 /* ================= DATE PICKER ================= */
@@ -311,11 +395,11 @@ section h2 {
 
 /* ================= FORM DESIGN ================= */
 form {
-    background: var(--card);
-    padding: 28px;
-    border-radius: 18px;
+    background: var(--glass-bg-strong);
+    padding: 24px;
+    border-radius: var(--surface-radius-lg);
     border: 1px solid var(--line);
-    box-shadow: var(--shadow-soft);
+    box-shadow: var(--surface-shadow);
 }
 
 .form-group {
@@ -374,7 +458,7 @@ i {
 
 .doctor-card.selected {
     border: 2px solid var(--brand);
-    transform: translateY(-4px);
+    transform: perspective(1100px) translateY(-4px) rotateX(2deg);
 }
 
 /* ================= FOOTER ================= */
@@ -404,6 +488,15 @@ footer {
         opacity: 1;
         transform: none;
         transition: none;
+    }
+
+    .hero-panel,
+    .hero-panel::after,
+    .doctor-card,
+    .primary-btn,
+    .secondary-btn {
+        transition: none;
+        transform: none;
     }
 }
 
@@ -468,11 +561,11 @@ footer {
 .consultant-card {
     max-width: 760px;
     margin: 0 auto;
-    background: var(--card);
+    background: var(--glass-bg-strong);
     border: 1px solid var(--line);
-    border-radius: 18px;
-    padding: 22px;
-    box-shadow: var(--shadow-soft);
+    border-radius: var(--surface-radius-lg);
+    padding: 24px;
+    box-shadow: var(--surface-shadow);
 }
 
 .consultant-subtext {
@@ -540,16 +633,6 @@ footer {
 /* ================= LIGHT THEME OVERRIDES ================= */
 body.theme-light {
     color: #0f2742;
-    background:
-        linear-gradient(120deg, rgba(230, 244, 255, 0.88), rgba(208, 232, 255, 0.8)),
-        url('https://images.unsplash.com/photo-1587351021759-3e566b3db4f6?auto=format&fit=crop&w=2000&q=80') center/cover fixed;
-}
-
-body.theme-light::before {
-    background:
-        radial-gradient(circle at 20% 20%, rgba(22, 130, 255, 0.18), transparent 42%),
-        radial-gradient(circle at 82% 14%, rgba(255, 196, 74, 0.2), transparent 34%),
-        radial-gradient(circle at 66% 86%, rgba(12, 64, 130, 0.08), transparent 30%);
 }
 
 body.theme-light .navbar,
@@ -575,6 +658,12 @@ body.theme-light .admin-link:hover {
 }
 
 body.theme-light .theme-toggle {
+    border-color: rgba(11, 59, 117, 0.25);
+    color: #0f2742;
+    background: rgba(16, 80, 154, 0.08);
+}
+
+body.theme-light .nav-toggle {
     border-color: rgba(11, 59, 117, 0.25);
     color: #0f2742;
     background: rgba(16, 80, 154, 0.08);
@@ -611,10 +700,10 @@ body.theme-light .error-message {
 
 /* ================= DOCTOR FILTERS ================= */
 .doctor-tools {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 14px;
-    padding: 14px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--surface-radius);
+    padding: 16px;
     margin-bottom: 22px;
 }
 
@@ -694,10 +783,11 @@ body.theme-light .error-message {
 }
 
 .step-item {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 12px;
-    padding: 10px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--surface-radius);
+    padding: 11px 12px;
+    min-height: 52px;
     display: flex;
     align-items: center;
     gap: 8px;
